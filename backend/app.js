@@ -27,6 +27,6 @@ forDb.connect('mongodb + srv://P1qu4nt3_MNG:M4n4g1nGC0D3F0RTh1s0n3@cluster0.yepb
     price: 1400,
 });
 
-app.use=(res,res,next) => {
+app.use=(res,rep,next) => {
     
 };
