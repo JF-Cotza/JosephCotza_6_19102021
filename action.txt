@@ -9,5 +9,15 @@ frontend:
     4. Exécutez npm start
     5. Exécutez le back-end sur http://localhost:3000 seulement
 
-backend
-1) npm init 
+backend (*=fait)
+*1) npm init => création de package.json
+*2) npm install --save express => installation d'express dans le projet, ce sera l'application du serveur
+*3) npm install --save mongoose => création de la relation avec mongoDB
+*4) creation du fichier app
+        -> ajout de express
+        -> ajout de mongoose et du lien vers la DB
+        -> ajout de path pour pouvoir par la suite créer des routes
+*5) npm install --save mongoose-unique-validator => sera utilisé pour vérifier l'unicité des mail (préciser dans les spécifications)
+*6) npm install --save bcrypt => sera utilisé pour crypter / comparer les mots de passe
+*7) npm install --save jsonwebtoken => pour la création de token
+*8) npm install --save multer => pour la gestion des fichiers par node
