@@ -7,7 +7,6 @@ const mongoose=require('mongoose')
 /* spécifique*/
 const Sauce = require('../models/sauce');
 
-
 //structure de base bour les futures routes
 //on autorise les origines croisées càd, port frontend et backend différent
 app.use((req, res, next) => {
@@ -17,8 +16,15 @@ app.use((req, res, next) => {
     next();
 });
 
+const userDb = 'P1qu4nt3_MNG';
+const pswordDb = 'M4n4g1nGC0D3F0RTh1s0n3';
+const linkDb = 'cluster0.yepbw.mongodb.net';
+const nameDb = 'piiq_db';
+
+const data = () => [userDb, pswordDb, linkDb, nameDb];
+
 //connexion à la DB
-mongoose.connect('mongodb+srv://P1qu4nt3_MNG:M4n4g1nGC0D3F0RTh1s0n3@cluster0.yepbw.mongodb.net/piiq_db?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${data[0]}:${data[1]}@${data[2]}/${data[3]}?retryWrites=true&w=majority`,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
