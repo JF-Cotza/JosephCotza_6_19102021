@@ -9,7 +9,7 @@ const Sauce = require('../models/sauce');
 
 //structure de base bour les futures routes
 //on autorise les origines croisées càd, port frontend et backend différent
-app.use((req, res, next) => {
+/*router.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
@@ -33,6 +33,6 @@ mongoose.connect(`mongodb+srv://${data[0]}:${data[1]}@${data[2]}/${data[3]}?retr
         console.log('Connexion à MongoDB échouée !'),
             console.log(error.message)
     });
-
+*/
 
 module.exports = router;

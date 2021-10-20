@@ -8,6 +8,7 @@ const User=require('../models/user');
 
 //structure de base bour les futures routes
 //on autorise les origines croisées càd, port frontend et backend différent
+/*
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -34,6 +35,6 @@ mongoose.connect(`mongodb+srv://${data[0]}:${data[1]}@${data[2]}/${data[3]}?retr
             console.log(error.message)
     });
 
-
+*/
 
 module.exports = router;
