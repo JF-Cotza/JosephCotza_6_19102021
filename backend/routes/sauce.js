@@ -1,5 +1,14 @@
-//structure de base bour les futures routes
 
+//structure de base bour les futures routes
+const express = require('express');
+const router = express.Router();
+const mongoose=require('mongoose')
+
+/* spécifique*/
+const Sauce = require('../models/sauce');
+
+
+//structure de base bour les futures routes
 //on autorise les origines croisées càd, port frontend et backend différent
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,7 +28,5 @@ mongoose.connect('mongodb+srv://P1qu4nt3_MNG:M4n4g1nGC0D3F0RTh1s0n3@cluster0.yep
             console.log(error.message)
     });
 
-exports.toto=()=>{
-    console.log('route ok');
-};
 
+module.exports = router;
