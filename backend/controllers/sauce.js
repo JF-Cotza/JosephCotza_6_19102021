@@ -25,7 +25,8 @@ exports.deleteSauce = () => {
 pour les sauces
 // création
     //app.post('/api/sauces', (req, res, next)) =>
-app.post('/', (req, res, next))
+    //app.post('/', (req, res, next)) =>
+createSauce(req,res,next)
     entrée / body req: { sauce: String, image: File }
     fonction:  Capture et enregistre l'image,
                         Analyse la sauce transformée en chaîne de caractères et l'enregistre dans la base de données en
@@ -37,13 +38,17 @@ app.post('/', (req, res, next))
 
 // lecture
     //app.get('/api/sauces', (req, res, next)) =>
-app.get('/', (req, res, next))
+    //app.get('/', (req, res, next)) =>
+getAllSauce(req,res,next)
     sortie / res : toutes les sauces
-    app.get('/api/sauces/:id', (req, res, next))
+    //app.get('/api/sauces/:id', (req, res, next))=>
+getOneSauce(req,res,next)
     sortie / res : la sauce correspondant à id
+
 // modification
     //app.put('/api/sauces/:id', (req, res, next))=>
-app.put('/:id', (req, res, next))
+    //app.put('/:id', (req, res, next))=>
+modifySauce(req,res,next)
     entrée / body req:d EITHER Sauce as JSON OR { sauce: String, image: File }
     fonction:  Met à jour la sauce avec l'_id fourni. Si une image est téléchargée, elle est capturée et l’imageUrl de la
                         sauce est mise à jour.
@@ -55,7 +60,8 @@ app.put('/:id', (req, res, next))
     sortie / res : { message: String }
 // suppression
     //app.delete('/api/sauces/:id', (req, res, next)) =>
-app.delete('/:id', (req, res, next))
+    //app.delete('/:id', (req, res, next))=>
+deleteSauce(req,res,next)
     fonction:      Supprime la sauce avec l'_idfourni.
     sortie / res : { message: String }
 // like
