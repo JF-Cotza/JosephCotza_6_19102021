@@ -1,14 +1,15 @@
 //structure de base bour les futures routes
 const express = require('express');
 const router = express.Router();
-const mongoose=require('mongoose')
+const userFonction = require('../controllers/user');
+
 
 /* spécifique*/
 const User=require('../models/user');
 
-//structure de base bour les futures routes
+//structure de base pour les futures routes
+/*const mongoose = require('mongoose')
 //on autorise les origines croisées càd, port frontend et backend différent
-/*
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -36,6 +37,8 @@ mongoose.connect(`mongodb+srv://${data[0]}:${data[1]}@${data[2]}/${data[3]}?retr
     });
 
 */
+router.post('/signup', userFonction.userSigning);
+router.post('/login', userFonction.userLogin);
 
 module.exports = router;
 
@@ -43,12 +46,14 @@ module.exports = router;
 /* à partir des spécifications
 pour les user
     // enregistrement/création
-        app.post('/api/auth/signup',(req,res,next)) => app.post('/signup',(req,res,next))
+            //app.post('/api/auth/signup',(req,res,next)) => 
+        app.post('/signup',(req,res,next))
             entrée / body req : { email: string, password: string }
             fonction : Hachage du mot de passe de l'utilisateur, ajout del'utilisateur à la base dedonnées.
             sortie / res : { message: string }
     // connexion
-        app.post('/api/auth/login',(req, res,next) => app.post('/login',(req, res,next)
+            //app.post('/api/auth/login',(req, res,next) => 
+        app.post('/login',(req, res,next)
             entrée / body req : { email: string, password: string }
             fonction :  Vérification desinformations d'identification de l'utilisateur,
                         renvoie l _id de l'utilisateur depuis la base de données et un token web JSON signé
