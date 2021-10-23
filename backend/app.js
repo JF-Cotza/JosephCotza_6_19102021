@@ -6,6 +6,8 @@ const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 const connectRoutes = require('./routes/connect');
 
+
+connectRoutes;
 //création de app, "l'application du backend"
 const app=express();
 
@@ -19,7 +21,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-connectRoutes;
 app.use('/api/sauce', sauceRoutes); // on appelle stuffRoutes comme 'fonction' de app. 
 app.use('/api/auth', userRoutes);
 
@@ -28,10 +29,9 @@ module.exports = app;
 
 
 /* élément vus en cours non utilisés :
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));  //le répertoire est fixe => on utilise static pour pouvoir l'utilser
-
+delete req.body._id // pour supprimer un id présent dans la req 
 */

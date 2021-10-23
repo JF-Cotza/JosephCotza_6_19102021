@@ -1,23 +1,45 @@
 /* spécifique*/
 const Sauce = require('../models/sauce');
 
-exports.createSauce = () => {
+exports.createSauce = (req,res, next) => {
+    const sauce=new Sauce({
+        ...req.body
+    });
+    sauce.save()
+        .then(()=>res.status(201).json({message:'sauce créée'}))
+        .catch(error=> res.status(400).json({error}));
     console.log('create sauce');
 };
 
-exports.getAllSauce = () => {
+exports.getAllSauce = (req,res,next) => {
+    /*Sauce.find()                  //find permet de chercher dans la DB. sans rien = tous
+        .then (sauces=> res.status(200).json(sauces))
+        .catch (error => res.status(400).json({error}))
+    */
     console.log('get all sauce')
 };
 
-exports.getOneSauce = () => {
+exports.getOneSauce = (req, res, next) => {
+    /*Sauce.findOne( { _id : req.params.id })     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre
+        .then(sauce => res.status(200).json(sauce))
+        .catch(error => res.status(400).json({ error }))
+    */
     console.log('get one sauce')
 };
 
-exports.modifySauce = () => {
-    console.log('modify sauce')
+exports.modifySauce = (req,res,next) => {
+/*    Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id : req.params.id })     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre)     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre pour pouvoir le modifier
+        .then(sauce => res.status(200).json({message : 'sauce mise à jour'}))
+        .catch(error => res.status(400).json({ error }));
+*/
+console.log('modify sauce')
 };
 
-exports.deleteSauce = () => {
+exports.deleteSauce = (req,res,next) => {
+    /*Sauce.deleteOne({ _id: req.params.id })
+        .then(sauce => res.status(200).json({message : 'sauce supprimée'}))
+        .catch(error => res.status(400).json({ error })))
+    */
     console.log('delete sauce')
 };
 
