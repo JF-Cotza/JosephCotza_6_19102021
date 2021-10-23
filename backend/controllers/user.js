@@ -1,13 +1,15 @@
 /* spécifique*/
 const User = require('../models/user');
 
-exports.userSigning=()=>{
-   
-    const user=new User({email:'toto@gmail.com',password:'dvjsbvsjbvksfbbfkb'})
+exports.userSigning=(req,res)=>{
+   console.log(' email: '+req.body.email+' password: '+req.body.password);
+    const user=new User({...req.body})
     user.save()
      .then(()=>console.log('toto créé'))
      .catch((error)=>console.log('erreur save: '+error.message))
 };
+
+
 
 exports.userLogin=()=>{
     console.log('user login')
