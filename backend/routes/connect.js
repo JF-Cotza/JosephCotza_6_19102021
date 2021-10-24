@@ -1,9 +1,17 @@
 
 const mongoose = require('mongoose');
-const link=require('../controllers/connect');
+// const link=require('../controllers/connect');
 
-//connexion à la DB
-mongoose.connect(JSON.stringify(link.link),
+
+
+
+const link = ``;
+
+
+
+
+
+mongoose.connect(link, //JSON.stringify(link.link),
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -14,6 +22,5 @@ mongoose.connect(JSON.stringify(link.link),
             console.log(error.message)
     });
 
-module.export=mongoose.connect;
 
-
+module.export = mongoose.connect;

@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use('/api/sauce', sauceRoutes); // on appelle stuffRoutes comme 'fonction' de app. 
+app.use('/api/sauces', sauceRoutes); // on appelle stuffRoutes comme 'fonction' de app. 
 app.use('/api/auth', userRoutes);
 
 /*générique : export des datas*/
