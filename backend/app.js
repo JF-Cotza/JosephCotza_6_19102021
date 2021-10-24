@@ -29,7 +29,7 @@ module.exports = app;
 
 
 /* élément vus en cours non utilisés :
-const jwt = require('jsonwebtoken');
+
 const multer = require('multer');
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));  //le répertoire est fixe => on utilise static pour pouvoir l'utilser

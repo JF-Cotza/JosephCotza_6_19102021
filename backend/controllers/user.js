@@ -1,6 +1,8 @@
 /* spécifique*/
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const token = { value: 'RANDOM_TOKEN_SECRET_FOR_DEVELOPPEMENT', end:'24h'}
 
 exports.userSigning=(req,res,next)=>{
     bcrypt.hash(req.body.password, 10) // on demande à bcryp de haché le mot de passe en le 'salant 10 fois'
@@ -33,8 +35,6 @@ exports.userLogin=(req,res,next)=>{
             if(!user){
                 return res.status(401).json({error:"l'utilisateur n'existe pas"})
             }
-              
-        //    console.log(user.id);
             bcrypt.compare(req.body.password, user.password)            //bcrypt répond par un booléen
                 .then(valid=>{              
                     if(!valid){
@@ -42,7 +42,7 @@ exports.userLogin=(req,res,next)=>{
                     }
                     res.status(200).json({ 
                         userId:user._id,
-                        token:'token'
+                        token:jwt.sign({userId:user._id}, token.value ,{expiresIn:token.end})
                     })
 
                 })
