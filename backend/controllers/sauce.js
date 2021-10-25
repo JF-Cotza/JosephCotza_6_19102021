@@ -2,59 +2,62 @@
 const Sauce = require('../models/sauce');
 
 exports.createSauce = (req,res, next) => {
-    console.log(req.body.name);
+    const sauceParsing=JSON.parse(req.body.sauce)
+    delete sauceParsing._id; // pour supprimer un id présent dans la req
     const sauce=new Sauce({
-        ...req.body
+        ...sauceParsing,
+        imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        
     });
     sauce.save()
-        .then(()=>res.status(201).json({message:'sauce créée'}))
+        .then(()=>{
+              res.status(201).json({message:'sauce créée'})})
         .catch(error=> {
-            console.log('erreur creation sauce:'+ error.message);
             res.status(400).json({error})}
             );
-    console.log('create sauce');
 };
 
 exports.getAllSauce = (req,res,next) => {
     Sauce.find()                  //find permet de chercher dans la DB. sans rien = tous
-        .then (sauces=> res.status(200).json(sauces))
+        .then ((sauces)=>{
+            res.status(200).json(sauces)
+            })
         .catch (error => {
-            console.log('erreur get all sauce:' + error.message);
             res.status(400).json({error})
         })
-    console.log('get all sauce')
 };
 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne( { _id : req.params.id })     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre
-        .then(sauce => res.status(200).json(sauce))
-        .catch(error => {
-            console.log('erreur getone sauce:' + error.message);
+        .then(sauce => {
+            const sauceStringify=JSON.stringify(sauce);
+            const sauceParsing=JSON.parse(sauceStringify);
+            res.status(200).json(sauceParsing)
+        })
+        .catch((error) => {
             res.status(400).json({ error })
         })
-    console.log('get one sauce')
 };
 
 exports.modifySauce = (req,res,next) => {
-    Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id : req.params.id })     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre)     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre pour pouvoir le modifier
+    const sauceObject=req.file ?
+    {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : {...req.body};
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id : req.params.id })     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre)     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre pour pouvoir le modifier
         .then(() => res.status(200).json({message : 'sauce mise à jour'}))
-        .catch(error =>{
-             console.log('erreur update sauce:' + error.message);
+        .catch((error) =>{
              res.status(400).json({ error })
         });
-
-console.log('modify sauce')
 };
 
 exports.deleteSauce = (req,res,next) => {
     Sauce.deleteOne({ _id: req.params.id })
         .then(() => res.status(200).json({message : 'sauce supprimée'}))
         .catch(error =>{
-            console.log('erreur delete sauce:' + error.message);
             res.status(400).json({ error })
         })
-    
-    console.log('delete sauce')
 };
 
 /*

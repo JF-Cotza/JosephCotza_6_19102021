@@ -13,9 +13,7 @@ const normalizePort = val => {
     return false;                       // un port ne peut pas être négatif => on renvoit false
 };
 
-const port = normalizePort(process.env.PORT || '3000');     //on écoute le port 3000 s'il n'y a pas un autre défini par le système.
-
-app.set('port', port);
+const port = normalizePort(process.env.PORT || '3000');     //on écoute le port 3000 s'il n'y a pas un autre défini par le système.app.set('port', port);
 
 const errorHandler = error => {
     if (error.syscall !== 'listen') {                      //si le système n'arrive pas à écouter

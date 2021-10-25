@@ -19,7 +19,6 @@ exports.userSigning=(req,res,next)=>{
                     })
                 )
                 .catch(error =>{
-                        console.log('erreur création user '+error.message);
                         res.status(400).json({ error })
                         });
             })
@@ -48,12 +47,10 @@ exports.userLogin=(req,res,next)=>{
                 })
                 
             .catch(error=> {
-                console.log('erreur1 login user ' + error.message);
                 res.status(500).json({error})
                 })
         })
         .catch(error => {
-            console.log('erreur2 login user ' + error.message);
             res.status(500).json({error})
         })
 };
