@@ -87,36 +87,139 @@ exports.howManyLike =(req,res,next)=>{
 
 exports.likes =(req,res,next)=>{
     //console.log(req.body); // req.body unlike : { userId: '61768143e4cc107a9e3f131c', like: -1 } // like { userId: '61768143e4cc107a9e3f131c', like: 1 }
-            let query = { _id: req.params.id };
-            let updateDocument={};
-            let userLike;
-            let userDislike;
-            let like=req.body.like;
-            let id=req.body.userId;
-            console.log(like+'/'+id);
-            Sauce.findOne(query)
-                .then((sauce)=>{
-                    console.log(sauce)
-                    if(like>0){
-                        Sauce.updateOne(sauce,{$push: {userLiked:id}})
-                        .then(()=>console.log('liked'))
-                        .catch(error=>{
+    console.log('test 9');
+    let query = { _id: req.params.id };
+    let userLike;
+    let userDislike;
+    let like=req.body.like;
+    let id=req.body.userId;
+    let statut='';
+
+    Sauce.findOne(query)
+    .then((sauce)=>{
+        if(sauce.userLiked.length>0){           //s'il existe un like
+            for(let user of sauce.userLiked){
+                if(user==id){
+                    statut+='L';                           //la personne a déjà liké
+                }
+            };
+            for (let user of sauce.userDisliked) {
+                if (user == id) {  
+                    statut+='D';                         //la personne n'a  liké mais disliké
+                }
+            }
+        };
+            
+        switch (statut){
+            case 'L':
+                //console.log('l utilisateur a déjà liké');
+                if (like >= 0) {
+                    Sauce.updateOne(sauce, { $pull: { userLiked: id } })
+                        .then(() => {
+                            res.status(201).json({ message: sauce.userLiked.length });
+                            console.log('unvoted')
+                        })
+                        .catch(error => {
+                            res.status(500).json({ error });
                             console.log(error.message)
                         })
-                    }
-                    if (like < 0) {
-                        Sauce.updateOne(sauce, { $push: { userDisliked: id } })
-                            .then(() => console.log('disliked'))
-                            .catch(error => {
-                                console.log(error.message)
-                            })
-                    }
-                })//fin then
-                .catch(error=>{
-                    console.log(error.message)
-                });//fin catch
+                };     
+                break;
+            case 'D':
+                //console.log('l utilisateur a disliké');
+                if (like < 0) {
+                    Sauce.updateOne(sauce, { $pull: { userDisliked: id } })
+                        .then(() => {
+                            res.status(201).json({ message: sauce.userLiked.length });
+                            console.log('unvoted')
+                        })
+                        .catch(error => {
+                            res.status(500).json({ error });
+                            console.log(error.message)
+                        })
+                };
+                break;
+            case 'LD':
+                //console.log('anomalie : like et dislike');
+                Sauce.updateOne(sauce, { $pull: { userDisliked: id,userLiked:id }})
+                    .then(() => {
+                        res.status(201).json({ message: sauce.userLiked.length });
+                        console.log('clean')
+                    })
+                    .catch(error => {
+                        res.status(500).json({ error });
+                        console.log(error.message)
+                    });
+                //console.log('nettoyage du doublon');
+                if (like > 0) {
+                    Sauce.updateOne(sauce, { $push: { userDisliked: id } })
+                        .then(() => {
+                            res.status(201).json({ message: sauce.userLiked.length });
+                            console.log('liked')
+                        })
+                        .catch(error => {
+                            res.status(500).json({ error });
+                            console.log(error.message)
+                        })
+                };
+                if (like < 0) {
+                    Sauce.updateOne(sauce, { $push: { userDisliked: id } })
+                        .then(() => {
+                            res.status(201).json({ message: sauce.userLiked.length });
+                            console.log('dislike')
+                        })
+                        .catch(error => {
+                            res.status(500).json({ error });
+                            console.log(error.message)
+                        })
+                };
+                if (like ==0){
+                    Sauce.updateOne(sauce, { $pull: { userDisliked: id, userLiked: id } })
+                        .then(() => {
+                            res.status(201).json({ message: sauce.userLiked.length });
+                            console.log('clean')
+                        })
+                        .catch(error => {
+                            res.status(500).json({ error });
+                            console.log(error.message)
+                        });
+                }
+                break;
+            default:
+                //console.log('pas encore liké ni disliké');
+                if (like > 0) {
+                    Sauce.updateOne(sauce, { $push: { userLiked: id } })
+                        .then(() => {
+                            res.status(201).json({message : sauce.userLiked.length});
+                            console.log('liked')
+                        })
+                        .catch(error => {
+                            res.status(500).json({ error });
+                            console.log(error.message)
+                        });
+                };
+                if (like < 0) {
+                    Sauce.updateOne(sauce, { $push: { userDisliked: id } })
+                        .then(() => {
+                            res.status(201).json({ message: sauce.userDisliked.length });
+                            console.log('disliked')
+                        })
+                        .catch(error => {
+                            res.status(500).json({ error });
+                            console.log(error.message)
+                        })
+                      
+        };
+        }
+    })
+    .catch(error=>{
+        console.log(error.message)
+    })
+}
+
+               
+             
             
-}   ;     
 /*            
 const query = { "name": "Popeye" };
 const updateDocument = {
