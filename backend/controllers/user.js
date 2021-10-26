@@ -25,9 +25,6 @@ exports.userSigning=(req,res,next)=>{
         .catch(error => res.status(500).json({error}));
 };
 
-//utilisateur créé mais message d'erreur ... => du à la création de link
-
-
 exports.userLogin=(req,res,next)=>{
     User.findOne({email : req.body.email})
         .then(user=>{

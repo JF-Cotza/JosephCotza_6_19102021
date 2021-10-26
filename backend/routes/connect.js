@@ -12,5 +12,4 @@ mongoose.connect(connectionLink,
         console.log('Connexion à MongoDB échouée !')
     });
 
-
 module.export = mongoose.connect;

@@ -1,5 +1,7 @@
 /* spécifique*/
 const Sauce = require('../models/sauce');
+const fileSystem=require('fs');                     //donne accés aux opérations systèmes, par exemple la suppression de fichier
+const { collection } = require('../models/sauce');
 
 exports.createSauce = (req,res, next) => {
     const sauceParsing=JSON.parse(req.body.sauce)
@@ -53,12 +55,76 @@ exports.modifySauce = (req,res,next) => {
 };
 
 exports.deleteSauce = (req,res,next) => {
-    Sauce.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({message : 'sauce supprimée'}))
-        .catch(error =>{
-            res.status(400).json({ error })
-        })
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce=>{
+            const filename=sauce.imageUrl.split('/image')[1]; // pour récupérer le nom du fichier à supprimer, on récupére l'image URL. l'image url contient le chemin complet répertoire('/image/')+nom. avec le split on obtient un tableau et on ne garde que la partie après le répertoire càd le nom du fichier
+            fileSystem.unlink(`/image/${filename}`, ()=>        // on appele la méthode unlink de fs pour supprimer le fichier .unlick('chemin+nom du fichier à supprimer', fonction à éxécuter quand la suppression est effectuée)
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'sauce supprimée' }))
+                    .catch(error => {
+                        res.status(400).json({ error })
+                    })
+                    )
+                })
+        .catch((error) => {
+            res.status(500).json({ error })
+        });
+
 };
+/*
+exports.howManyLike =(req,res,next)=>{
+    let query = { _id: req.params.id };
+    Sauce.findOne(query)
+        .then((sauce)=>{
+            Like=sauce.userLiked.length;
+            userDislike=sauce.userDisliked.length;
+            res.status(200).json({ message: 'affichage des likes' })
+        })
+        .catch((error) => {
+            res.status(500).json({ error })
+        });
+}*/
+
+exports.likes =(req,res,next)=>{
+    //console.log(req.body); // req.body unlike : { userId: '61768143e4cc107a9e3f131c', like: -1 } // like { userId: '61768143e4cc107a9e3f131c', like: 1 }
+            let query = { _id: req.params.id };
+            let updateDocument={};
+            let userLike;
+            let userDislike;
+            let like=req.body.like;
+            let id=req.body.userId;
+            console.log(like+'/'+id);
+            Sauce.findOne(query)
+                .then((sauce)=>{
+                    console.log(sauce)
+                    if(like>0){
+                        Sauce.updateOne(sauce,{$push: {userLiked:id}})
+                        .then(()=>console.log('liked'))
+                        .catch(error=>{
+                            console.log(error.message)
+                        })
+                    }
+                    if (like < 0) {
+                        Sauce.updateOne(sauce, { $push: { userDisliked: id } })
+                            .then(() => console.log('disliked'))
+                            .catch(error => {
+                                console.log(error.message)
+                            })
+                    }
+                })//fin then
+                .catch(error=>{
+                    console.log(error.message)
+                });//fin catch
+            
+}   ;     
+/*            
+const query = { "name": "Popeye" };
+const updateDocument = {
+    $push: { "items.$[].toppings": "fresh mozzarella" }
+};
+const result = await pizza.updateOne(query, updateDocument);
+*/
+
 
 /*
 pour les sauces

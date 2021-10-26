@@ -2,12 +2,10 @@
 const express=require('express');
 const path = require('path'); // donne accés au systeme de fichier
 
-
 //création des routes/
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 const connectRoutes = require('./routes/connect');
-
 
 connectRoutes;
 //création de app, "l'application du backend"
