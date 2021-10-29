@@ -142,19 +142,19 @@ exports.likes =(req,res,next)=>{
     
     Sauce.findOne(query)
     .then((sauce)=>{
-        if(like=1){
-            Sauce.updateOne(sauce,{$push:{userLiked:userId}}) 
+        if(like==1){
+            Sauce.updateOne(sauce,{$push:{userLiked:id}}) 
                 .then(()=>res.status(201).json({message:'Mise à jour effectuée'}))
                 .catch(error=>res.status(500).json({error}))
             }
-        else if (like = -1) {
-            Sauce.updateOne(sauce, { $push: { userDisliked: userId } })
+        else if (like == -1) {
+            Sauce.updateOne(sauce, { $push: { userDisliked: id } })
                 .then(() => res.status(201).json({ message: 'Mise à jour effectuée' }))
                 .catch(error => res.status(500).json({ error }))
         }
-        else if (like=0){
+        else if (like==0){
             {
-                Sauce.updateOne(sauce, { $pull: { userLiked: userId, userDisliked:userId } })
+                Sauce.updateOne(sauce, { $pull: { userLiked: id, userDisliked:id } })
                     .then(() => res.status(201).json({ message: 'Mise à jour effectuée' }))
                     .catch(error => res.status(500).json({ error }))
             }
