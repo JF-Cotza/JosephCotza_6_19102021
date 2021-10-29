@@ -9,8 +9,8 @@ const multer=require('../middleware/multer');
 router.post('/', checker,multer, toSauceFunction.createSauce); //multer après authentification pour éviter enregitrement images inutiles
 router.post('/:id/like',toSauceFunction.likes);
 router.get('/', checker, multer, toSauceFunction.getAllSauce);
-router.get('/:id',checker, multer, toSauceFunction.getOneSauce);
-//router.get('/id/like',toSauceFunction.howManyLike);
+router.get('/:id', checker, multer, toSauceFunction.getOneSauce);
+//router.get('/id',toSauceFunction.howManyLike);
 router.put('/:id',checker, multer, toSauceFunction.modifySauce);
 router.delete('/:id',checker, multer, toSauceFunction.deleteSauce);
 
