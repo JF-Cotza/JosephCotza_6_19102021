@@ -51,22 +51,3 @@ exports.userLogin=(req,res,next)=>{
             res.status(500).json({error})
         })
 };
-
-//l'id est bien renvoyé mais j'ai une erreur 500...
-
-/* à partir des spécifications
-suite à la création du controler
-pour les user
-    // enregistrement/création
-        exports.userSigning((req,res,next))=>
-            entrée / body req : { email: string, password: string }
-            fonction : Hachage du mot de passe de l'utilisateur, ajout del'utilisateur à la base dedonnées.
-            sortie / res : { message: string }
-    // connexion
-        exports.userLogin(req,res,next)
-            entrée / body req : { email: string, password: string }
-            fonction :  Vérification desinformations d'identification de l'utilisateur,
-                        renvoie l _id de l'utilisateur depuis la base de données et un token web JSON signé
-                        (contenant également l'_idde l'utilisateur).
-            sortie /res :{ userId: string, token: string }
-*/
