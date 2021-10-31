@@ -1,7 +1,7 @@
 /* spécifique*/
 const Sauce = require('../models/sauce');
 const fileSystem=require('fs');                     //donne accés aux opérations systèmes, par exemple la suppression de fichier
-const { collection } = require('../models/sauce');
+
 
 exports.createSauce = (req,res, next) => {
     const sauceParsing=JSON.parse(req.body.sauce)
@@ -32,68 +32,16 @@ exports.getAllSauce = (req,res,next) => {
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne( { _id : req.params.id })     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre
         .then(sauce => {
-            const sauceStringify=JSON.stringify(sauce);
-            const sauceParsing=JSON.parse(sauceStringify);
-            let id = req.body.userId;
-            let valueToReturn;
-            let statut;
-            if (sauceParsing.userLiked.length>0){
-                for (let user of sauceParsing.userLiked) {
-                    if (user == id) {
-                        statut += 'L';                           //la personne a déjà liké
-                    }
-                    else{
-                        console.log('déjà des likes mais pas de cet user');
-                    }
-                console.log('like:'+user);
-                }
-                console.log('userParsing !=[]');
-            }
-            else{
-                console.log('sauce parsing like');
-                console.log(sauceParsing.userLiked);
-            };
-            if (sauceParsing.userDisliked.length>0){
-                for (let user of sauceParsing.userDisliked) {
-                    if (user == id) {
-                        statut += 'D';                         //la personne n'a  liké mais disliké
-                    }
-                    else {
-                        console.log('déjà des dislikes mais pas de cet user');
-                    }
-                console.log('dislike:'+user);
-                };
-                console.log('user parsing dislike !=[]');
-                //console.log(sauceParsing.userDisliked.length);
-            }
-            else {
-                console.log('sauce parsing dislike =[]');
-                //console.log(sauceParsing);
-            };
-    
-
-            /*console.log(statut);*/
-            console.log('aprés statut');
-            console.log(statut);
-           // console.log(sauceParsing);
-            switch (statut){
-                case 'L':
-                    valueToReturn=1;
-                    break;
-                case 'D':
-                    valueToReturn=-1;
-                    break;
-                default:
-                    valueToReturn=0;
-            };
-
-            console.log('value '+valueToReturn);
+           // const sauceStringify=JSON.stringify(sauce);
+           // const sauceParsing=JSON.parse(sauceStringify);
         
-        //à côté des pouces : nombre de userLiked et Dislikes
-            sauceParsing.likes=sauceParsing.userLiked.length;
-            sauceParsing.dislikes=sauceParsing.userDisliked.length;
+           // sauceParsing.likes=sauceParsing.usersLiked.length;
+           // sauceParsing.dislikes=sauceParsing.usersDisliked.length;
 
-            res.status(200).json(sauceParsing)
+           sauce.likes=sauce.usersLiked.length;
+           sauce.dislikes=sauce.usersDisliked.length;
+
+            res.status(200).json(sauce); //sauceParsing)
         })
         .catch((error) => {
             res.status(400).json({ error })
@@ -143,18 +91,18 @@ exports.likes =(req,res,next)=>{
     Sauce.findOne(query)
     .then((sauce)=>{
         if(like==1){
-            Sauce.updateOne(sauce,{$push:{userLiked:id}}) 
+            Sauce.updateOne(sauce,{$push:{usersLiked:id}}) 
                 .then(()=>res.status(201).json({message:'Mise à jour effectuée'}))
                 .catch(error=>res.status(500).json({error}))
             }
         else if (like == -1) {
-            Sauce.updateOne(sauce, { $push: { userDisliked: id } })
+            Sauce.updateOne(sauce, { $push: { usersDisliked: id } })
                 .then(() => res.status(201).json({ message: 'Mise à jour effectuée' }))
                 .catch(error => res.status(500).json({ error }))
         }
         else if (like==0){
             {
-                Sauce.updateOne(sauce, { $pull: { userLiked: id, userDisliked:id } })
+                Sauce.updateOne(sauce, { $pull: { usersLiked: id, usersDisliked:id } })
                     .then(() => res.status(201).json({ message: 'Mise à jour effectuée' }))
                     .catch(error => res.status(500).json({ error }))
             }
