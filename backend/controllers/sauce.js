@@ -42,11 +42,29 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req,res,next) => {
-    const sauceObject=req.file ?
-    {
-        ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : {...req.body};
+    let diskImageUrl;
+    let key='15';
+
+    const sauceObject = req.file ?
+        {
+            ...JSON.parse(req.body.sauce),
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : { ...req.body };
+
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce)=>{
+            diskImageUrl=sauce.imageUrl;
+            if (sauceObject.imageUrl){
+                console.log('object');
+                console.log(sauceObject.imageUrl)
+                console.log('disk');
+                console.log(diskImageUrl);
+            }
+            else{console.log("image non modifiée")};
+        })
+        .catch(() => diskImageUrl='')
+
+
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id : req.params.id })     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre)     //on recherche dans la DB, l'objet ayant pour _id, celui passé en paramétre pour pouvoir le modifier
         .then(() => res.status(200).json({message : 'sauce mise à jour'}))
         .catch((error) =>{
@@ -57,8 +75,8 @@ exports.modifySauce = (req,res,next) => {
 exports.deleteSauce = (req,res,next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce=>{
-            const filename=sauce.imageUrl.split('/image')[1]; // pour récupérer le nom du fichier à supprimer, on récupére l'image URL. l'image url contient le chemin complet répertoire('/image/')+nom. avec le split on obtient un tableau et on ne garde que la partie après le répertoire càd le nom du fichier
-            fileSystem.unlink(`/image/${filename}`, ()=>        // on appele la méthode unlink de fs pour supprimer le fichier .unlick('chemin+nom du fichier à supprimer', fonction à éxécuter quand la suppression est effectuée)
+            const filename=sauce.imageUrl.split('/images/')[1]; // pour récupérer le nom du fichier à supprimer, on récupére l'image URL. l'image url contient le chemin complet répertoire('/image/')+nom. avec le split on obtient un tableau et on ne garde que la partie après le répertoire càd le nom du fichier
+            fileSystem.unlink(`./images/${filename}`, ()=>        // on appele la méthode unlink de fs pour supprimer le fichier .unlink('chemin+nom du fichier à supprimer', fonction à éxécuter quand la suppression est effectuée)
                 Sauce.deleteOne({ _id: req.params.id })
                     .then(() => res.status(200).json({ message: 'sauce supprimée' }))
                     .catch(error => {
@@ -69,7 +87,6 @@ exports.deleteSauce = (req,res,next) => {
         .catch((error) => {
             res.status(500).json({ error })
         });
-
 };
 
 

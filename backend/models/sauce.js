@@ -18,15 +18,3 @@ const sauceSchema = mongoose.Schema({   //on crée le modèle     / les infos du
 
 sauceSchema.plugin(uniqueValidator);                              //uniqueValidator renforce la sécurité et évite des bugs
 module.exports = mongoose.model('Sauce', sauceSchema);            //on l'exporte
-
-/* notes
-unique : 
-    - une sauce ne peut être créée que par un utilisateur
-    - une sauce ne peut exister qu'en 1 exemplaire (en théorie) dans la DB
-
-like / dislike :
-https://qastack.fr/programming/19695058/how-to-define-object-in-array-in-mongoose-schema-correctly-with-2d-geo-index
-
-required: false
-    - la sauce n'est pas forcément likée ou dislikée
-*/

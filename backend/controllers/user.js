@@ -1,8 +1,9 @@
 /* spécifique*/
 const User = require('../models/user');
+const connect=require('./connect');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const token = { value: 'RANDOM_TOKEN_SECRET_FOR_DEVELOPPEMENT', end:'24h'}
+const token = connect.token;
 
 exports.userSigning=(req,res,next)=>{
     bcrypt.hash(req.body.password, 10) // on demande à bcryp de haché le mot de passe en le 'salant 10 fois'
@@ -29,22 +30,21 @@ exports.userLogin=(req,res,next)=>{
     User.findOne({email : req.body.email})
         .then(user=>{
             if(!user){
-                return res.status(401).json({error:"l'utilisateur n'existe pas"})
+                return res.status(401).json({ error }) //:"l'utilisateur n'existe pas"
             }
             bcrypt.compare(req.body.password, user.password)            //bcrypt répond par un booléen
                 .then(valid=>{              
                     if(!valid){
-                        return res.status(401).json({ error: "connexion non autorisée" })
+                        return res.status(401).json({ error }) //: "connexion non autorisée" 
                     }
                     res.status(200).json({ 
                         userId:user._id,
                         token:jwt.sign({userId:user._id}, token.value ,{expiresIn:token.end})
                     })
 
-                })
-                
+                })     
             .catch(error=> {
-                res.status(500).json({error})
+                res.status(500).json({error})           //erreur serveur
                 })
         })
         .catch(error => {

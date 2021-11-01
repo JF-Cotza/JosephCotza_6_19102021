@@ -10,8 +10,3 @@ userSchema.plugin(uniqueValidator);                             //uniqueValidato
 
 module.exports = mongoose.model('User', userSchema);            //on l'exporte
 
-/* les infos du projet
-Utilisateur
-● email : String — adresse e-mail de l'utilisateur [unique]
-● password : String — mot de passe de l'utilisateur haché
-*/
