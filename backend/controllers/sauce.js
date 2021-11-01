@@ -55,13 +55,7 @@ exports.modifySauce = (req,res,next) => {
         .then((sauce)=>{
             diskImageUrl=sauce.imageUrl;
             if (sauceObject.imageUrl){
-                console.log('object');
-                console.log(sauceObject.imageUrl)
-                console.log('disk');
-                console.log(diskImageUrl);
-
                 const filename=diskImageUrl.split('/images/')[1]; 
-                console.log('filename : '+filename);
                 fileSystem.unlink(`./images/${filename}`, ()=>console.log('fichier supprimé'))
             }
             else{console.log("image non modifiée")};
